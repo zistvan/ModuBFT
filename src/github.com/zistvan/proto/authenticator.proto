@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package bftmessages;
+option go_package = "bftmessages";
+
+enum SigType {
+    PKSig = 0;
+    MAC = 1;
+}
+
+message Authenticator {
+    int32 fromNodeId = 1;
+    int32 toNodeId = 2;    
+    bytes sig = 3;
+    SigType sigType = 4;
+}

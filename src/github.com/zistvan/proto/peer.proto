@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package bftmessages;
+option go_package = "bftmessages";
+
+import "authenticator.proto";
+
+
+enum MsgType {
+    ClientRequest = 0;
+    ClientResponse = 1;
+    PrePrepare = 2;
+    Prepare = 3;
+    Commit = 4;
+    Checkpoint = 5;
+    Probe = 6;
+    ProbeAck = 7;
+    NewConfig = 8;
+    SyncState = 9;  
+}
+
+message PeerMessage {
+    int32 fromNodeId = 1;
+    int32 msgId = 2;
+    int32 epochId = 3;
+    MsgType type = 4;
+    bytes attachedData = 5;
+    repeated Authenticator auth = 6;
+  }
+
+  message CertificateMessage {
+    bool initialized = 1;
+    int32 cntPrepared = 2;
+    repeated PeerMessage certificates = 3;
+  }
+
+  message PayloadNewConfig {
+    repeated int32 members = 1;
+    int32 leader = 2;
+    bytes digestState = 3;
+    bytes digestP = 4;
+  }
+
+  message PayloadSyncState {
+    repeated int32 clients = 1;
+    CertificateMessage certificate = 2;
+    PeerMessage newConfigMessage = 3;
+  }
